@@ -14,7 +14,7 @@ function Card(props) {
             <div className={leftM}>
                 <div className='font-bold text-xl mb-2'>{props.kpiName}</div>
                 <p>Average: {props.kpiAvg}</p>
-                <p>Current: {props.kpiAvg}</p>
+                <p>Current: {props.currKpi}</p>
                 
             </div>
         </div>

@@ -4,6 +4,9 @@ import { FaTemperatureHigh } from "react-icons/fa";
 import { WiHumidity } from "react-icons/wi";
 import { BsMoisture } from "react-icons/bs";
 import { CiLight } from "react-icons/ci";
+import LineGrah from '../graphs/line'
+import DoughGraph from '../graphs/donut'
+import BarGraph from '../graphs/bar'
 import io from 'socket.io-client';
 
 function Dashboard() {
@@ -17,7 +20,14 @@ function Dashboard() {
  const [lightList, setLightList] = useState([0])
  const [humidList, setHumidList] = useState([0])
 
- // connecting to socket for greenhouse kpi's
+ //time for received KPI
+ const [times, setTimes] = useState([0])
+
+ if (tempList.length == 0) {
+  console.log('zero')
+ }
+
+ // connecting to listening socket for greenhouse kpi's data 
   useEffect(() => {
     const socket = io('http://localhost:5000')
     socket.on('connect', ()=> {
@@ -25,13 +35,16 @@ function Dashboard() {
 
       socket.on('updateSensorData', (message) => {
         setCurrKPIs([message.temperature, message.humidity, message.moisture, message.light])
-        setMoistList([...moistList, message.moisture])
-        setLightList([...lightList, message.light])
-        setHumidList([...humidList, message.humidity])
-        setTempList([...tempList, message.temperature])
+        setMoistList(prevItems => prevItems.concat(message.moisture))
+        setLightList(prevItems => prevItems.concat(message.light))
+        setHumidList(prevItems => prevItems.concat(message.humidity))
+        setTempList(prevItems => prevItems.concat(message.temperature));
+        setTimes(prevItems => prevItems.concat(message.time))
+
       })
     })
   })
+  console.log(tempList)
 
   // total values collected for each KPI
   let totalTemp = 0, totalHumid = 0, totalMoist = 0, totalLight = 0 ; 
@@ -44,14 +57,19 @@ function Dashboard() {
     
 
   }
-
-  console.log(lightList)
+  console.log(`total: ${totalTemp} lenght: ${tempList.length}`)
 
   //average values for each kpi
   let tempAvg = (totalTemp / tempList.length).toFixed(2)
   let moistAvg = (totalMoist / moistList.length).toFixed(2)
   let lightAvg = (totalLight / lightList.length).toFixed(2)
   let humidAvg = (totalHumid / humidList.length).toFixed(2)
+
+  // Line graph data values
+  const values = [tempList, humidList, moistList, lightList]
+  const labels = ['Temperature', 'HJumidity', 'Moisture', 'Light']
+  const colors = ['#72A0C1', '#002D62' , '#fc6c85', '#FF3800']
+  const doughnutValues = [tempList.length, humidList.length, moistList.length, lightList.length ]
   return (
     <div>          
       <div className='flex overflow-auto'>
@@ -73,7 +91,15 @@ function Dashboard() {
         </div>
         
       </div>
-                       
+      <div className='flex grid grid-cols-1 xl:grid-cols-2'>
+        <div className='xl:w-[600px]'>
+            <LineGrah values={values} times={times} labels={labels} colors={colors}/>
+        </div>
+        <div className='w-[350px] ml-[50px]'>
+          <DoughGraph values={doughnutValues} labels={labels} colors={colors} />
+        </div>
+      </div> 
+      <BarGraph colors={colors} labels={labels}/>                
     </div>
   )
 }
