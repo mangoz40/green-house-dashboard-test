@@ -72,7 +72,7 @@ function Dashboard() {
   const doughnutValues = [tempList.length, humidList.length, moistList.length, lightList.length ]
   return (
     <div>          
-      <div className='flex overflow-auto'>
+      <div className='flex overflow-auto mb-[50px]'>
         <div className='ml-[10px] active:bg-primary' onClick={()=> setDisplayDistrict(0)}>
           <Card  icon={FaTemperatureHigh} color={{color:"#FF3800"}} 
             currKpi={currKPIs[0]} kpiName={'Temperature'} kpiAvg={tempAvg}/>
@@ -99,7 +99,7 @@ function Dashboard() {
           <DoughGraph values={doughnutValues} labels={labels} colors={colors} />
         </div>
       </div> 
-      <BarGraph colors={colors} labels={labels}/>                
+      {/*<BarGraph colors={colors} labels={labels}/>      */ }         
     </div>
   )
 }

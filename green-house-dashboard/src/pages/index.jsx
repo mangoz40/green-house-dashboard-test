@@ -1,7 +1,9 @@
 import { React, useState, useEffect } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import Sidebar from '../components/sidebar'
 import Navbar from '../components/navbar'
 import Dashboard from '../components/dashboard'
+import Control from '../pages/controls'
 
 
 function User() {
@@ -34,9 +36,11 @@ function User() {
               onOpenSidenav={() => setOpen(true)}
             />
           </div>
-          <div>
-            <Dashboard />
-          </div>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/control" element={<Control />} />
+            
+          </Routes>
           
         </main>
 

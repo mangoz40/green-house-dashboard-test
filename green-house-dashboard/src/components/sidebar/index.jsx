@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from 'react'
 import { HiX } from 'react-icons/hi'
+import { Link } from 'react-router-dom'
 
 const Sidebar = ({ open, onClose }) => {
 
@@ -20,10 +21,21 @@ const Sidebar = ({ open, onClose }) => {
 
         <div className={`mx-[56px] mt-[50px] flex items-center`}>
           <div className="mt-1 ml-1 text-[26px] font-bold">
-            DODMA 
+            VIEWS
           </div>
         </div>
-
+        <ul className="mb-auto pt-1">
+          <li className="my-[3px] flex cursor-pointer items-center px-8 font-bold">
+            <Link to="/"> 
+              Main Dashboard
+            </Link>
+          </li>
+          <li className="my-[3px] flex cursor-pointer items-center px-8 font-bold">
+            <Link to="/control"> 
+              Control
+            </Link>
+          </li>
+        </ul>
     </div>
   )
 }
